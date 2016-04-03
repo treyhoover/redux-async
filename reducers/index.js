@@ -1,4 +1,6 @@
 import { combineReducers } from 'redux'
+import { routerReducer } from 'react-router-redux';
+
 import {
   SELECT_REDDIT, INVALIDATE_REDDIT,
   REQUEST_POSTS, RECEIVE_POSTS
@@ -55,7 +57,8 @@ function postsByReddit(state = { }, action) {
 
 const rootReducer = combineReducers({
   postsByReddit,
-  selectedReddit
+  selectedReddit,
+  routing: routerReducer
 });
 
 export default rootReducer
