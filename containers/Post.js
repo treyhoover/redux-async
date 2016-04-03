@@ -1,32 +1,45 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
+import { fetchPostIfNeeded } from '../actions';
 
 class Post extends Component {
   constructor(props) {
     super(props);
   }
 
-  componentWillMount() {
-    console.log('gonna mount!', this);
-  }
-
   componentDidMount() {
-    // const { dispatch, selectedReddit } = this.props;
-    // dispatch(fetchPostsIfNeeded(selectedReddit))
-  }
-
-  componentWillReceiveProps(nextProps) {
-    // if (nextProps.selectedReddit !== this.props.selectedReddit) {
-    //   const { dispatch, selectedReddit } = nextProps;
-    //   dispatch(fetchPostsIfNeeded(selectedReddit))
-    // }
+    const { dispatch, selectedReddit, postId } = this.props;
+    dispatch(fetchPostIfNeeded(selectedReddit, postId));
   }
 
   render() {
+    const { selectedReddit, postId, post } = this.props;
+    const selfText = post.selftext ? <p>{post.selftext}</p> : null;
+    const url = post.url ? <a href={post.url}>{post.url}</a> : null;
     return (
-      <h1>Post!</h1>
+      <div>
+        <h1>{post.title}</h1>
+        {selfText}
+        {url}
+      </div>
     )
   }
 }
 
-export default Post;
+function mapStateToProps(state, route) {
+  const { postsByReddit } = state;
+  const { selectedReddit, postId } = route.params;
+  const posts = (postsByReddit[selectedReddit] || {}).postData || {};
+  const post = posts[postId] || {
+    isFetching: true,
+    data: {}
+  };
+
+  return {
+    selectedReddit,
+    postId,
+    post
+  }
+}
+
+export default connect(mapStateToProps)(Post)

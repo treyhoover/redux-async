@@ -1,9 +1,9 @@
-import { combineReducers } from 'redux'
-import { routerReducer } from 'react-router-redux';
+import {combineReducers} from 'redux'
+import {routerReducer} from 'react-router-redux';
 
 import {
   SELECT_REDDIT, INVALIDATE_REDDIT,
-  REQUEST_POSTS, RECEIVE_POSTS
+  REQUEST_POSTS, RECEIVE_POSTS, REQUEST_POST, RECEIVE_POST
 } from '../actions'
 
 function selectedReddit(state = 'reactjs', action) {
@@ -37,16 +37,28 @@ function posts(state = {
         items: action.posts,
         lastUpdated: action.receivedAt
       });
+    case RECEIVE_POST:
+      return Object.assign({}, state, {
+        isFetching: false,
+        didInvalidate: false,
+        postData: {[action.post.id]: action.post},
+        lastUpdated: action.receivedAt
+      });
     default:
       return state
   }
 }
 
-function postsByReddit(state = { }, action) {
+function postsByReddit(state = {}, action) {
   switch (action.type) {
     case INVALIDATE_REDDIT:
     case RECEIVE_POSTS:
     case REQUEST_POSTS:
+      return Object.assign({}, state, {
+        [action.reddit]: posts(state[action.reddit], action)
+      });
+    case REQUEST_POST:
+    case RECEIVE_POST:
       return Object.assign({}, state, {
         [action.reddit]: posts(state[action.reddit], action)
       });

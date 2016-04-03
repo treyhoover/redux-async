@@ -4,7 +4,7 @@ import { selectReddit, fetchPostsIfNeeded, invalidateReddit } from '../actions'
 
 import Posts from '../components/Posts'
 
-class App extends Component {
+class PostsContainer extends Component {
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
@@ -51,7 +51,7 @@ class App extends Component {
   }
 }
 
-App.propTypes = {
+PostsContainer.propTypes = {
   selectedReddit: PropTypes.string.isRequired,
   posts: PropTypes.array.isRequired,
   isFetching: PropTypes.bool.isRequired,
@@ -79,4 +79,4 @@ function mapStateToProps(state, route) {
   }
 }
 
-export default connect(mapStateToProps)(App)
+export default connect(mapStateToProps)(PostsContainer)

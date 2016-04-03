@@ -11,7 +11,7 @@ import Post from './containers/Post'
 import configureStore from './store/configureStore'
 
 const store = configureStore();
-const history = syncHistoryWithStore(browserHistory, store)
+const history = syncHistoryWithStore(browserHistory, store);
 
 render(
   <Provider store={store}>
